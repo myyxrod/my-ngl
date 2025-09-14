@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NGL NI ROD</title>
+</head>
+<body>
+    <h1 style="text-align:center;">NGL NI ROD</h1>
+
+    <form id="myForm" style="text-align:center;">
+        <p><b>NAME:</b><br>
+            <input type="text" id="name" placeholder="Enter Name" required>
+        </p>
+
+        <p><b>AGE:</b><br>
+            <input type="text" id="age" placeholder="Enter Age" required>
+        </p>
+
+        <p><b>GENDER:</b><br>
+            Male <input type="radio" name="gender" value="Male" required>
+            Female <input type="radio" name="gender" value="Female">
+        </p>
+
+        <input type="reset" value="Reset">
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById("myForm").addEventListener("submit", function(e){
+            e.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const age = document.getElementById("age").value;
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+
+            let submissions = JSON.parse(localStorage.getItem("submissions")) || [];
+            submissions.push({name, age, gender});
+            localStorage.setItem("submissions", JSON.stringify(submissions));
+
+            // Redirect to Thank You page instead of date.html
+            window.location.href = "thanks.html";
+        });
+    </script>
+</body>
+</html>
