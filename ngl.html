@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Submissions</title>
+    <style>
+        /* Male styles */
+        .male.young {
+            color: saddlebrown; /* Male 17↓ */
+            font-weight: bold;
+        }
+        .male.adult {
+            color: blue; /* Male 18↑ */
+            font-weight: bold;
+        }
+
+        /* Female styles */
+        .female.young {
+            color: rosybrown; /* Female 17↓ */
+            font-weight: bold;
+        }
+        .female.adult {
+            color: deeppink; /* Female 18↑ */
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Protected Submissions</h1>
+
+    <div id="loginSection">
+        <p><b>Enter Password:</b></p>
+        <input type="password" id="passwordInput" placeholder="Password">
+        <button onclick="checkPassword()">Login</button>
+        <p id="error" style="color:red;"></p>
+    </div>
+
+    <div id="submissionsSection" style="display:none;">
+        <h2>Male Submissions</h2>
+        <ul id="maleList"></ul>
+
+        <h2>Female Submissions</h2>
+        <ul id="femaleList"></ul>
+
+        <button onclick="clearData()">Clear All Submissions</button>
+    </div>
+
+    <script>
+        const correctPassword = "rod123"; // change this to your secret password
+
+        function checkPassword() {
+            const entered = document.getElementById("passwordInput").value;
+            if (entered === correctPassword) {
+                document.getElementById("loginSection").style.display = "none";
+                document.getElementById("submissionsSection").style.display = "block";
+
+                let submissions = JSON.parse(localStorage.getItem("submissions")) || [];
+
+                let maleList = document.getElementById("maleList");
+                let femaleList = document.getElementById("femaleList");
+                maleList.innerHTML = "";
+                femaleList.innerHTML = "";
+
+                submissions.forEach(function(submit){
+                    let li = document.createElement("li");
+                    li.textContent = `Name: ${submit.name}, Age: ${submit.age}, Gender: ${submit.gender}`;
+
+                    let age = parseInt(submit.age, 10);
+
+                    if (submit.gender === "Male") {
+                        if (!isNaN(age) && age <= 17) {
+                            li.classList.add("male", "young"); // brown
+                        } else {
+                            li.classList.add("male", "adult"); // blue
+                        }
+                        maleList.appendChild(li);
+                    } else if (submit.gender === "Female") {
+                        if (!isNaN(age) && age <= 17) {
+                            li.classList.add("female", "young"); // rosybrown
+                        } else {
+                            li.classList.add("female", "adult"); // deeppink
+                        }
+                        femaleList.appendChild(li);
+                    }
+                });
+            } else {
+                document.getElementById("error").textContent = "Wrong password!";
+            }
+        }
+
+        function clearData() {
+            localStorage.removeItem("submissions");
+            document.getElementById("maleList").innerHTML = "";
+            document.getElementById("femaleList").innerHTML = "";
+        }
+    </script>
+</body>
+</html>
